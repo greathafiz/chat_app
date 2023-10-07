@@ -16,23 +16,21 @@ const httpServer = createServer((req, res) => {
   }
 });
 
-const io = new Server(httpServer);
+const io = new Server(httpServer, {
+  connectionStateRecovery: {},
+});
 
 io.on("connection", (socket) => {
   console.log("a user connected");
 
-  //   socket.on("chat message", (msg) => {
-  // console.log(`message: ${msg}`);
-  //   });
-
   socket.on("chat message", (msg) => {
-    // console.log(`message: ${msg}`);
     io.emit("chat message", `${msg}`);
   });
 
-  // socket.on("disconnect", () => {
-  //   console.log("user disconnected");
-  // });
+  socket.on("disconnect", () => {
+    console.log("a user disconnected");
+    io.emit('user disconnects', 'a user just disconnected')
+  });
 });
 
 const port = process.env.PORT || 4000;
