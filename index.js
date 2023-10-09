@@ -21,10 +21,9 @@ const io = new Server(httpServer, {
 });
 
 io.on("connection", (socket) => {
-  console.log("a user connected");
-
-  socket.on("chat message", (msg) => {
-    io.emit("chat message", `${msg}`);
+  console.log(`a user connected`);
+  socket.on("chat message", (username, msg) => {
+    io.emit("chat message", (`${username}: ${msg}`));
   });
 
   socket.on("disconnect", () => {
